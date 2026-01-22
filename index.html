@@ -1,99 +1,1266 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <title>Calendario Yan</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <style>
-    body{
-      margin:0;
-      font-family: Arial, sans-serif;
-      background:#0f172a;
-      color:#fff;
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      min-height:100vh;
-    }
-    .box{
-      background:#111827;
-      padding:20px;
-      border-radius:12px;
-      width:100%;
-      max-width:380px;
-      box-shadow:0 10px 30px rgba(0,0,0,.4);
-    }
-    h1{
-      text-align:center;
-      margin-bottom:15px;
-    }
-    input,button{
-      width:100%;
-      padding:12px;
-      margin-top:10px;
-      border-radius:8px;
-      border:none;
-      font-size:16px;
-    }
-    input{
-      background:#020617;
-      color:#fff;
-      border:1px solid #334155;
-    }
-    button{
-      background:#22c55e;
-      color:#022c22;
-      font-weight:bold;
-      cursor:pointer;
-    }
-    ul{
-      margin-top:15px;
-      padding:0;
-      list-style:none;
-    }
-    li{
-      background:#020617;
-      border:1px solid #334155;
-      padding:10px;
-      border-radius:6px;
-      margin-bottom:6px;
-    }
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Calendario de Cumpleaños • 12 Meses</title>
+<meta name="color-scheme" content="light" />
+<style>
+:root{
+    --panelKids: url("panel-bg");
+    --cardKids: url("card-bg");
+
+    --panelBg: url("panel-bg.jpg");
+    --txt:#14151a;
+    --muted: rgba(20,21,26,.70);
+
+    --card: rgba(255,255,255,.86);
+    --cardSolid:#ffffff;
+
+    --shadow: 0 18px 60px rgba(0,0,0,.22);
+    --shadow2: 0 10px 24px rgba(0,0,0,.18);
+
+    --maxw: 1100px;
+
+    --cCyan: rgba(0,170,255,.95);
+    --cPink: rgba(255,45,155,.85);
+    --cGold: rgba(246,180,50,.92);
+
+    /* TU FONDO */
+    --bgImg: none;
+  }
+
+  *{ box-sizing:border-box; }
+  html,body{ height:100%; }
+  body{
+    margin:0;
+    font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+    color:#2a2a33;
+    overflow-x:hidden;
+    background:
+      radial-gradient(900px 700px at 15% 10%, rgba(255,170,210,.35), transparent 55%),
+      radial-gradient(900px 700px at 85% 15%, rgba(140,215,255,.35), transparent 55%),
+      radial-gradient(900px 700px at 50% 95%, rgba(255,235,170,.30), transparent 55%),
+      #fff7fb;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+  }
+
+  body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background: rgba(255, 255, 255, 0.35);
+  backdrop-filter: blur(0px);
+  -webkit-backdrop-filter: blur(0px);
+  display: none;
+}
+
+  .bgMove{ position:fixed; inset:-30%; pointer-events:none; opacity:.25; filter: blur(22px); background:
+  radial-gradient(500px 420px at 10% 20%, rgba(255,170,210,.35), transparent 60%),
+  radial-gradient(520px 460px at 80% 30%, rgba(140,215,255,.35), transparent 62%),
+  radial-gradient(540px 480px at 50% 80%, rgba(255,235,170,.30), transparent 65%);
+  animation: drift 22s linear infinite; z-index:0; }
+  @keyframes drift{
+    0%{ transform: translate3d(-2%, -1%, 0) scale(1.02); }
+    50%{ transform: translate3d(2%, 1%, 0) scale(1.06); }
+    100%{ transform: translate3d(-2%, -1%, 0) scale(1.02); }
+  }
+
+  .wrap{ display:flex; justify-content:center; padding:22px 14px 44px; position:relative; z-index:1; }
+  
+  .shell{
+    width:min(var(--maxw), 100%);
+    border-radius:28px;
+    /* Panel background image (Yan) */
+    background:
+      linear-gradient(180deg, rgba(255,255,255,.14), rgba(255,255,255,.24)),
+      var(--panelBg);
+    background-size: cover;
+    background-position: center;
+    border:1px solid rgba(255,255,255,.10);
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    overflow:hidden;
+  }
+
+  .header{ padding:18px 16px 14px; border-bottom:1px solid rgba(0,0,0,.06);
+background:
+  linear-gradient(180deg, rgba(255,255,255,.35), rgba(255,255,255,.60)),
+  var(--panelKids);
+background-size: cover; background-position: center; }
+  .topRow{ display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; align-items:flex-start; }
+
+  .title{ margin:0; font-weight: 1000; font-size: clamp(22px, 4vw, 36px);
+letter-spacing:.2px; background: linear-gradient(90deg, rgba(255,120,180,1), rgba(110,200,255,1), rgba(255,210,120,1));
+-webkit-background-clip:text; background-clip:text; color:transparent; text-shadow: 0 10px 24px rgba(0,0,0,.12);}
+
+  .sub{
+    margin-top:8px;
+    color: var(--muted);
+    font-weight: 900;
+    font-size: 13px;
+    display:flex; gap:10px; flex-wrap:wrap; align-items:center;
+  }
+  .sub #statsTxt, .sub #todayTxt{
+    padding: 6px 10px;
+    border-radius: 999px;
+    border: 1px solid rgba(0,0,0,.10);
+    background: rgba(255,255,255,.70);
+    box-shadow: 0 6px 16px rgba(0,0,0,.10);
+  }
+
+  .toolbar{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+
+  .btn{
+    border:1px solid rgba(0,0,0,.10);
+    background: linear-gradient(135deg,
+      rgba(255,165,210,.78),
+      rgba(140,215,255,.78),
+      rgba(255,230,170,.78)
+    );
+    color:#1f2430;
+    border-radius: 999px;
+    padding: 11px 14px;
+    font-weight: 980;
+    cursor:pointer;
+    box-shadow: 0 14px 30px rgba(0,0,0,.14);
+    transition: transform .12s ease, filter .12s ease, box-shadow .12s ease;
+    user-select:none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .btn:hover{ transform: translateY(-1px); filter: brightness(1.03); }
+  .btn:active{ transform: translateY(0) scale(.98); }
+  .btn.primary{
+    background: linear-gradient(135deg,
+      rgba(120,220,255,.88),
+      rgba(255,170,220,.78),
+      rgba(255,235,185,.78)
+    );
+  }
+  .btn.danger{
+    background: linear-gradient(135deg,
+      rgba(255,140,160,.88),
+      rgba(255,180,220,.74)
+    );
+  }
+
+  .btn.primary{ border-color: rgba(110,200,255,.55);
+background: linear-gradient(135deg, rgba(255,165,210,.55), rgba(140,215,255,.55), rgba(255,230,170,.55)); }
+  .btn.danger{ border-color: rgba(255,120,140,.55);
+background: linear-gradient(135deg, rgba(255,180,190,.65), rgba(255,220,230,.55)); }
+
+  .searchWrap{ margin-top: 12px; position:relative; }
+  .searchWrap input{ width:100%; padding: 14px 14px 14px 46px; border-radius: 999px;
+border:1px solid rgba(0,0,0,.10); background: rgba(255,255,255,.64); color:#2a2a33; outline:none; font-size: 15.5px; }
+  .searchWrap .icon{
+    position:absolute; left: 16px; top:50%;
+    transform: translateY(-50%);
+    opacity:.70; font-size: 18px;
+  }
+
+  .content{ padding: 16px; background:
+  linear-gradient(180deg, rgba(255,255,255,.20), rgba(255,255,255,.20)),
+  var(--panelKids);
+background-size: cover; background-position: center; }
+
+  .months{
+    display:grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+  }
+  @media (max-width: 980px){
+    .months{ grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+  @media (max-width: 520px){ .months{ grid-template-columns: repeat(3, minmax(0, 1fr)); gap:10px; } }
+
+  .monthCard{ position:relative; border-radius: 18px; border: 1px solid rgba(0,0,0,.08);
+background: var(--cardKids); background-size: cover; background-position:center;
+box-shadow: 0 14px 28px rgba(0,0,0,.10); overflow:hidden; min-height: 180px; }
+
+  .mBG{
+    position:absolute; inset:0;
+    opacity:.32;
+    pointer-events:none;
+    background-size:cover;
+    background-position:center 72%;
+    filter: saturate(1.08) contrast(1.02);
+    transform: scale(1.08);
+  }
+  .mShade{ position:absolute; inset:0; background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.25)); pointer-events:none; }
+  .monthCard > *{ position:relative; z-index:1; }
+
+  .mHead{ display:flex; justify-content:space-between; gap:10px; align-items:center; padding: 12px 12px 10px;
+border-bottom: 1px solid rgba(0,0,0,.06); background: rgba(255,255,255,.44); }
+  .mName{ font-weight: 1000; font-size: 15px; letter-spacing:.2px; display:flex; gap:10px; align-items:center; color:#1f2430;}
+  .mBadge{ padding: 6px 10px; border-radius: 999px; border: 1px solid rgba(0,0,0,.08);
+background: rgba(255,255,255,.64); color:#1f2430; font-weight: 980; font-size: 12px; white-space:nowrap;}
+
+  .mBody{
+    padding: 10px 12px 12px;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+  }
+
+  .entry{
+    display:flex; align-items:flex-start; gap:10px;
+    padding: 9px 10px;
+    border-radius: 14px;
+    border: 1px solid rgba(0,0,0,.10);
+    background: rgba(255,255,255,.64);
+    cursor:pointer;
+    user-select:none;
+    -webkit-tap-highlight-color: transparent;
+    transition: transform .12s ease, border-color .12s ease;
+  }
+  .entry:hover{ transform: translateY(-1px); border-color: rgba(0,0,0,.16); }
+  .entry:active{ transform: translateY(0) scale(.99); }
+
+  .eIcon{
+    width:30px; height:30px;
+    border-radius: 12px;
+    border: 1px solid rgba(0,0,0,.10);
+    background: rgba(255,255,255,.72);
+    display:grid; place-items:center;
+    font-size: 16px;
+    flex:0 0 auto;
+    margin-top:1px;
+  }
+  .eMain{ min-width:0; flex:1; }
+  .eLine{ display:flex; gap:10px; align-items:center; min-width:0; }
+  .eName{
+    margin:0;
+    font-weight: 1000;
+    font-size: 13.5px;
+    white-space: nowrap;
+    overflow:hidden;
+    text-overflow: ellipsis;
+  }
+  .eDM{
+    margin:0;
+    font-weight: 1000;
+    font-size: 12.5px;
+    opacity:.92;
+    flex:0 0 auto;
+    padding: 4px 8px;
+    border-radius: 999px;
+    border: 1px solid rgba(0,0,0,.10);
+    background: rgba(255,255,255,.70);
+  }
+
+  .empty{
+    padding: 10px 10px;
+    border-radius: 14px;
+    border: 2px dashed rgba(0,0,0,.16);
+    color: rgba(20,21,26,.70);
+    background: rgba(255,255,255,.65);
+    font-weight: 900;
+    font-size: 12.5px;
+    white-space: pre-wrap;
+  }
+
+  .footer{ padding: 12px 16px 16px; border-top:1px solid rgba(0,0,0,.06);
+display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap; align-items:center;
+background: rgba(255,255,255,.64); }
+  .mini{ opacity:.90; font-weight:900; color: rgba(20,21,26,.78); }
+  .mini strong{ color: rgba(20,21,26,.92); }
+
+  .overlay{
+    position:fixed; inset:0;
+    background: rgba(0,0,0,.55);
+    display:none;
+    align-items:center; justify-content:center;
+    padding: 18px;
+    z-index: 99;
+  }
+  .overlay.show{ display:flex; }
+  .modal{
+    width: min(560px, 100%);
+    border-radius: 22px;
+    background: var(--cardSolid);
+    border: 1px solid rgba(0,0,0,.10);
+    box-shadow: 0 30px 90px rgba(0,0,0,.35);
+    overflow:hidden;
+    color: var(--txt);
+  }
+  .modalHead{
+    padding: 16px 16px 12px;
+    border-bottom: 1px solid rgba(0,0,0,.08);
+    display:flex; justify-content:space-between; align-items:center; gap:10px;
+    background: rgba(255,255,255,.90);
+  }
+  .modalHead h2{ margin:0; font-size: 18px; font-weight:1000; }
+  .x{
+    width: 40px; height: 40px;
+    border-radius: 14px;
+    border:1px solid rgba(0,0,0,.10);
+    background: rgba(255,255,255,.85);
+    color: var(--txt);
+    cursor:pointer;
+    font-weight: 1000;
+    display:grid; place-items:center;
+  }
+  .modalBody{ padding: 14px 16px 16px; display:grid; gap: 12px; }
+  .field label{ display:block; color: rgba(20,21,26,.72); font-weight: 900; font-size: 12.5px; margin: 0 0 6px; }
+  .field input, .field select{
+    width:100%;
+    padding: 12px;
+    border-radius: 14px;
+    border:1px solid rgba(0,0,0,.10);
+    background: rgba(250,250,252,.95);
+    color: var(--txt);
+    outline:none;
+    font-size: 14.5px;
+  }
+  .actions{ display:flex; gap:10px; flex-wrap:wrap; }
+
+  .toast{
+    position: fixed; left: 50%; bottom: 18px;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,.85);
+    border: 1px solid rgba(255,255,255,.14);
+    padding: 10px 14px;
+    border-radius: 999px;
+    color: rgba(242,242,246,.94);
+    font-weight: 1000;
+    display:none;
+    z-index: 120;
+    max-width: 92vw;
+    white-space: nowrap;
+    overflow:hidden;
+    text-overflow: ellipsis;
+  }
+  .toast.show{ display:block; }
+
+  .errbar{
+    display:none;
+    margin-top:10px;
+    padding:10px 12px;
+    border-radius:14px;
+    border:1px solid rgba(255,77,94,.45);
+    background: rgba(255,77,94,.14);
+    color: rgba(120,0,20,.98);
+    font-weight: 900;
+    font-size: 12.5px;
+    white-space: pre-wrap;
+  }
+  .errbar.show{ display:block; }
+
+  .monthCard::after{ content:none !important; }
+
+  /* ====== MAMÁ (NUEVO) ====== */
+  .mItem{
+    display:flex; align-items:center; gap:10px;
+    padding: 10px 12px;
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,.12);
+    background: rgba(0,0,0,.22);
+  }
+  .mAvatar{
+    width:34px; height:34px;
+    border-radius: 14px;
+    border: 1px solid rgba(255,255,255,.14);
+    background: rgba(0,0,0,.22);
+    display:grid; place-items:center;
+    flex:0 0 auto;
+  }
+  .mNameTxt{
+    margin:0;
+    font-weight:1000;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  .mActions{ display:flex; gap:8px; flex:0 0 auto; }
+  .btn.small{ padding: 9px 10px; border-radius: 12px; font-weight:1000; }
+
+  /* ====== FIX: mostrar nombre + fecha en los cuadritos (kid theme) ====== */
+  .entry{ background: rgba(255,255,255,.72); border: 1px solid rgba(0,0,0,.08); }
+  .eIcon{ background: rgba(255,255,255,.85); border: 1px solid rgba(0,0,0,.08); }
+  .eName{ color:#1f2430; }
+  .eDM{ color:#1f2430; background: rgba(255,255,255,.64); border: 1px solid rgba(0,0,0,.08); }
+  .empty{ background: rgba(255,255,255,.65); border: 1px solid rgba(0,0,0,.08); color: rgba(31,36,48,.70); }
+  @media (max-width: 520px){
+    .entry{ align-items:center; }
+    .eLine{ flex-wrap:wrap; }
+    .eName{ max-width: 100%; }
+  }
+
+@media (max-width: 520px){
+  .monthCard{ min-height: 200px; }
+  .mBody{ padding: 10px 10px 12px; }
+
+  .entry{
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 10px 10px;
+  }
+
+  .eIcon{
+    width: 28px;
+    height: 28px;
+    border-radius: 12px;
+    font-size: 15px;
+    margin-top: 0;
+  }
+
+  .eMain{ width: 100%; min-width: 0; }
+  .eLine{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: nowrap;
+    min-width: 0;
+  }
+
+  .eName{
+    white-space: normal !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    display: block;
+    max-width: 70%;
+    line-height: 1.15;
+    font-size: 13.5px;
+  }
+
+  .eDM{
+    flex: 0 0 auto;
+    white-space: nowrap;
+    font-size: 12.5px;
+    padding: 4px 8px;
+    border-radius: 999px;
+  }
+
+  .empty{
+    text-align: center;
+    padding: 12px 10px;
+  }
+}
+
+.entry, .eMain, .eLine{ min-width: 0; }
+
+@media (max-width: 520px){
+  .monthCard{ min-height: 220px; }
+  .mBody{
+    max-height: 260px;
+    overflow: auto;
+    padding: 10px 10px 12px;
+    scrollbar-width: thin;
+  }
+  .mBody::-webkit-scrollbar{ width: 8px; }
+  .mBody::-webkit-scrollbar-thumb{
+    background: rgba(0,0,0,.12);
+    border-radius: 999px;
+  }
+
+  .entry{
+    padding: 10px 10px 10px 10px;
+    gap: 8px;
+    border-radius: 16px;
+  }
+  .eLine{
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+  .eName{
+    max-width: 100% !important;
+    font-size: 14px;
+    line-height: 1.15;
+  }
+  .eDM{
+    font-size: 12.5px;
+    padding: 4px 10px;
+  }
+}
+
+.empty{
+  border: 1px solid rgba(0,0,0,.08) !important;
+  background: rgba(255,255,255,.70) !important;
+  color: rgba(31,36,48,.72) !important;
+}
+
+body::after{
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.06);
+  pointer-events: none;
+  z-index: 0;
+}
+</style>
 </head>
 <body>
-  <div class="box">
-    <h1>📅 Calendario Yan</h1>
-    <input id="texto" placeholder="Escribe una nota o cita" />
-    <button onclick="agregar()">Agregar</button>
-    <ul id="lista"></ul>
+<div class="bgMove" aria-hidden="true"></div>
+
+<div class="wrap">
+  <div class="shell">
+    <div class="header">
+      <div class="topRow">
+        <div style="min-width:0">
+          <h1 class="title">𝕮𝖆𝖑𝖊𝖓𝖉𝖆𝖗𝖎𝖔 𝖉𝖊 𝕮𝖚𝖒𝖑𝖊𝖆ñ𝖔𝖘</h1>
+          <div class="sub">
+            <span id="statsTxt">Total: 0 • Próximos: 0 esta semana • 0 este mes</span>
+            <span style="opacity:.55;">•</span>
+            <span id="todayTxt">Hoy: —</span>
+          </div>
+        </div>
+
+        <div class="toolbar">
+          <button class="btn primary" id="btnUnlock">🔐 Desbloquear</button>
+          <button class="btn" id="btnMama">👩🏻‍🦰 Mamá</button>
+          <button class="btn" id="btnAdd">✨ Agregar</button>
+          <button class="btn" id="btnLock">🔒 Bloquear</button>
+        </div>
+      </div>
+
+      <div class="searchWrap">
+        <div class="icon">🔎</div>
+        <input id="search" type="text" placeholder="Buscar por nombre" />
+      </div>
+
+      <div class="errbar" id="errbar"></div>
+    </div>
+
+    <div class="content">
+      <div class="months" id="months"></div>
+    </div>
+
+    <div class="footer">
+      <div class="mini">👀 Público: puede ver todo. <strong>✍️ Editar/Eliminar solo con contraseña</strong></div>
+      <div class="mini">🎀 Hembra • 💙 Varón • Mamá 👩🏻‍🦰</div>
+    </div>
   </div>
+</div>
 
-  <script>
-    const lista = document.getElementById("lista");
-    // Cargar notas guardadas
-const guardado = JSON.parse(localStorage.getItem("notasYan") || "[]");
-guardado.forEach(t => {
-  const li = document.createElement("li");
-  li.textContent = t;
-  lista.appendChild(li);
-});
+<!-- View -->
+<div class="overlay" id="ovView">
+  <div class="modal">
+    <div class="modalHead">
+      <h2 id="viewTitle">🎂 Cumpleaños</h2>
+      <button class="x" id="xView">✕</button>
+    </div>
+    <div class="modalBody" id="viewBody"></div>
+    <div class="modalBody" style="padding-top:0;">
+      <div class="actions">
+        <button class="btn" id="closeView">Cerrar</button>
+        <button class="btn primary" id="editFromView">Editar</button>
+        <button class="btn danger" id="delFromView">Eliminar</button>
+      </div>
+    </div>
+  </div>
+</div>
 
-    function agregar(){
-      const texto = document.getElementById("texto");
-      if(texto.value.trim()==="") return;
+<!-- Form -->
+<div class="overlay" id="ovForm">
+  <div class="modal">
+    <div class="modalHead">
+      <h2 id="formTitle">➕ Agregar cumpleaños</h2>
+      <button class="x" id="xForm">✕</button>
+    </div>
+    <div class="modalBody">
+      <div class="field">
+        <label>Nombre</label>
+        <input id="fName" type="text" placeholder="Ej:" maxlength="60" />
+      </div>
+      <div class="field">
+        <label>Fecha de nacimiento</label>
+        <input id="fDate" type="date" />
+      </div>
+      <div class="field">
+        <label>Sexo</label>
+        <select id="fSex">
+          <option value="male">Varón 💙</option>
+          <option value="female">Hembra 🎀</option>
+          <option value="mama">Mamá 👩</option>
+        </select>
+      </div>
+      <div class="actions">
+        <button class="btn" id="cancelForm">Cancelar</button>
+        <button class="btn danger" id="delForm">Eliminar</button>
+        <button class="btn primary" id="saveForm">Guardar</button>
+      </div>
+    </div>
+  </div>
+</div>
 
-      const li = document.createElement("li");
-      li.textContent = texto.value;
-      lista.appendChild(li);
-      // Guardar notas
-const notas = [];
-document.querySelectorAll("#lista li").forEach(li => {
-  notas.push(li.textContent);
-});
-localStorage.setItem("notasYan", JSON.stringify(notas));
+<!-- Password -->
+<div class="overlay" id="ovPass">
+  <div class="modal">
+    <div class="modalHead">
+      <h2>🔐 Contraseña</h2>
+      <button class="x" id="xPass">✕</button>
+    </div>
+    <div class="modalBody">
+      <div class="field">
+        <label>Poner contraseña para editar/eliminar</label>
+        <input id="pInput" type="password" inputmode="numeric" placeholder="****" />
+      </div>
+      <div class="actions">
+        <button class="btn" id="cancelPass">Cancelar</button>
+        <button class="btn primary" id="okPass">Entrar</button>
+      </div>
+    </div>
+  </div>
+</div>
 
-      texto.value="";
+<!-- =========================
+     ✅ MAMA: LISTADO (NUEVO)
+========================== -->
+<div class="overlay" id="ovMama">
+  <div class="modal">
+    <div class="modalHead">
+      <h2>👩🏻‍🦰 Listado de Mamá</h2>
+      <button class="x" id="xMama">✕</button>
+    </div>
+    <div class="modalBody">
+      <div class="actions" style="justify-content:space-between; align-items:center; gap:10px;">
+        <div style="opacity:.82; font-weight:900; font-size:12.5px;">Agrega nombres.</div>
+        <button class="btn primary" id="btnMamaAdd">➕ Agregar</button>
+      </div>
+
+      <div id="mamaList" style="display:grid; gap:10px; margin-top:6px;"></div>
+
+      <div class="actions" style="justify-content:flex-end;">
+        <button class="btn" id="closeMama">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- =========================
+     ✅ MAMA: FORM (NUEVO)
+========================== -->
+<div class="overlay" id="ovMamaForm">
+  <div class="modal">
+    <div class="modalHead">
+      <h2 id="mamaFormTitle">➕ Agregar a Mamá</h2>
+      <button class="x" id="xMamaForm">✕</button>
+    </div>
+    <div class="modalBody">
+      <div class="field">
+        <label>Nombre</label>
+        <input id="mName" type="text" placeholder="Ej:" maxlength="60" />
+      </div>
+      <div class="actions">
+        <button class="btn" id="mCancel">Cancelar</button>
+        <button class="btn danger" id="mDelete">Eliminar</button>
+        <button class="btn primary" id="mSave">Guardar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(() => {
+  const STORAGE_KEY = "bday_calendar_12months_v1";
+  const LOCK_KEY = "bday_calendar_12months_lock_v1";
+  const EDIT_PASSWORD = "1960"; // TU CONTRASEÑA
+
+  // ✅ NUEVO: almacenamiento para Mamá
+  const MAMA_KEY = "mama_list_v1";
+
+  // =========================
+  // ✅ CLOUD (Google Apps Script) - (Yan) SOLO ESTO SE AGREGÓ
+  // =========================
+  const API_URL = "https://script.google.com/macros/s/AKfycbyoF11xC6GUXlwkhSsL9vpGz7b3tJkZmlA6rHG93xkXn_RqcqRpXugove9OIq75orhkNw/exec";
+
+  // JSONP helper (evita CORS)
+  function jsonp(params){
+    return new Promise((resolve, reject)=>{
+      const cb = "__cb_" + Math.random().toString(16).slice(2);
+      const url = API_URL + (API_URL.includes("?") ? "&" : "?") + params + "&callback=" + cb;
+
+      const s = document.createElement("script");
+      const t = setTimeout(()=>{
+        cleanup();
+        reject(new Error("Tiempo de espera (JSONP)"));
+      }, 12000);
+
+      function cleanup(){
+        clearTimeout(t);
+        try{ delete window[cb]; } catch(e){ window[cb] = undefined; }
+        if (s && s.parentNode) s.parentNode.removeChild(s);
+      }
+
+      window[cb] = (data)=>{
+        cleanup();
+        resolve(data);
+      };
+
+      s.onerror = ()=>{
+        cleanup();
+        reject(new Error("No cargó el script (JSONP)"));
+      };
+
+      s.src = url;
+      document.head.appendChild(s);
+    });
+  }
+
+  async function cloudPull(){
+    try{
+      const res = await jsonp("action=list");
+      if (!res || res.ok !== true) return;
+
+      if (Array.isArray(res.items)){
+        data = res.items.map(normalizeItem).filter(x => x.name && x.date);
+        safeSaveLocalOnly(data); // cache local
+        render();
+        toast("☁️ Sincronizado");
+      }
+    }catch(e){
+      console.warn("cloudPull:", e);
     }
-  </script>
+  }
+
+  async function cloudPush(list){
+    try{
+      const payload = encodeURIComponent(btoa(unescape(encodeURIComponent(JSON.stringify(list || [])))));
+      const res = await jsonp("action=save&payload=" + payload);
+      if (res && res.ok === true) {
+        // ok
+      }
+    }catch(e){
+      console.warn("cloudPush:", e);
+    }
+  }
+
+  const $ = (s) => document.querySelector(s);
+  const toastEl = $("#toast");
+  const errbar = $("#errbar");
+
+  window.addEventListener("error", (e) => {
+    errbar.classList.add("show");
+    errbar.textContent = "ERROR: " + (e?.message || e) + (e?.filename ? ("\n" + e.filename + ":" + e.lineno) : "");
+  });
+
+  function toast(msg){
+    toastEl.textContent = msg;
+    toastEl.classList.add("show");
+    clearTimeout(toastEl._t);
+    toastEl._t = setTimeout(()=>toastEl.classList.remove("show"), 2200);
+  }
+
+  function safeLoad(){
+    try{
+      const v = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+      return Array.isArray(v) ? v : [];
+    }catch{ return []; }
+  }
+
+  // ✅ CAMBIO: se separa local-only y luego save normal que también sube a la nube
+  function safeSaveLocalOnly(data){
+    try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }
+    catch(e){ toast("No puedo guardar (storage bloqueado)"); console.error(e); }
+  }
+  function safeSave(data){
+    safeSaveLocalOnly(data);
+    cloudPush(data); // ✅ sube a Google
+  }
+
+  function loadUnlocked(){ return localStorage.getItem(LOCK_KEY) === "1"; }
+  function setUnlocked(v){ localStorage.setItem(LOCK_KEY, v ? "1" : "0"); }
+  function uid(){ return Math.random().toString(16).slice(2) + Date.now().toString(16); }
+
+  function pad2(n){ return String(n).padStart(2,"0"); }
+  function formatDM(iso){
+    const p = String(iso).split("-");
+    if (p.length !== 3) return iso;
+    return `${p[2]}/${p[1]}`; // dd/mm
+  }
+  function monthName(m){
+    return ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sept","Oct","Nov","Dic"][m];
+  }
+  function escapeHtml(s){
+    return String(s)
+      .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;").replaceAll("'","&#039;");
+  }
+
+  const monthsEl = $("#months");
+  const searchEl = $("#search");
+  const statsTxt = $("#statsTxt");
+  const todayTxt = $("#todayTxt");
+
+  const ovView = $("#ovView");
+  const ovForm = $("#ovForm");
+  const ovPass = $("#ovPass");
+
+  const viewTitle = $("#viewTitle");
+  const viewBody = $("#viewBody");
+
+  const formTitle = $("#formTitle");
+  const fName = $("#fName");
+  const fDate = $("#fDate");
+  const fSex = $("#fSex");
+
+  let data = safeLoad();
+
+  // ✅ NUEVO: trae data global para que tu amigo vea lo mismo
+  cloudPull();
+
+  /* IMPORTANTE: Arranca BLOQUEADO si no hay lock guardado */
+  if (localStorage.getItem(LOCK_KEY) == null) setUnlocked(false);
+
+  let unlocked = loadUnlocked();
+
+  let viewingId = null;
+  let editingId = null;
+
+  // ✅ FIX: permitir "mama" sin convertirlo en "male"
+  function normalizeItem(it){
+    const date = String(it?.date || "").trim();
+    const sex0 = String(it?.sex || "male").trim(); // male | female | mama
+    const sex = (sex0 === "female" || sex0 === "mama") ? sex0 : "male";
+
+    return {
+      id: String(it?.id || uid()),
+      name: String(it?.name || "").trim(),
+      date,
+      sex
+    };
+  }
+
+  data = data.map(normalizeItem).filter(x => x.name && x.date);
+  safeSaveLocalOnly(data);
+
+  function updateStats(){
+    const t = new Date();
+    const todayKey = `${pad2(t.getDate())}/${pad2(t.getMonth()+1)}`;
+    const todayList = data.filter(x => formatDM(x.date) === todayKey);
+    todayTxt.textContent = `Hoy: ${todayList[0]?.name || "—"}`;
+
+    let weekCount = 0;
+    let monthCountN = 0;
+
+    const today0 = new Date(t.getFullYear(), t.getMonth(), t.getDate());
+
+    for (const x of data){
+      const bd = new Date(x.date + "T00:00:00");
+      if (isNaN(bd)) continue;
+
+      const next = new Date(t.getFullYear(), bd.getMonth(), bd.getDate());
+      if (next < today0) next.setFullYear(next.getFullYear() + 1);
+
+      const diff = Math.round((next - today0) / (1000*60*60*24));
+      if (diff <= 7) weekCount++;
+      if (diff <= 31) monthCountN++;
+    }
+
+    statsTxt.textContent = `Total: ${data.length} • Próximos: ${weekCount} esta semana • ${monthCountN} este mes`;
+  }
+
+  function matchesSearch(item, q){
+    if (!q) return true;
+    const name = (item.name||"").toLowerCase();
+    const dm = formatDM(item.date);
+    const md = dm.split("/").reverse().join("/");
+    return name.includes(q) || dm.includes(q) || md.includes(q);
+  }
+
+  function sortMonthItems(list){
+    return list.slice().sort((a,b)=>{
+      const da = Number(String(a.date).split("-")[2] || 0);
+      const db = Number(String(b.date).split("-")[2] || 0);
+      if (da !== db) return da - db;
+      return (a.name||"").localeCompare(b.name||"", "es");
+    });
+  }
+
+  function sexIcon(sex){
+    if (sex === "female") return "🎀";
+    if (sex === "mama") return "👩";
+    return "💙";
+  }
+
+  function render(){
+    updateStats();
+
+    const q = (searchEl.value || "").trim().toLowerCase();
+
+    const byMonth = Array.from({length:12}, () => []);
+    for (const it0 of data){
+      const it = normalizeItem(it0);
+      const d = new Date(it.date + "T00:00:00");
+      if (isNaN(d)) continue;
+      if (!matchesSearch(it, q)) continue;
+      byMonth[d.getMonth()].push(it);
+    }
+
+    let html = "";
+    for (let m=0; m<12; m++){
+      const list = sortMonthItems(byMonth[m]);
+      const bgUrl = "card-bg.jpg";
+
+      const entries = list.length ? list.map(it=>{
+        const icon = sexIcon(it.sex);
+        return `
+          <div class="entry" data-id="${it.id}" title="Toca para ver">
+            <div class="eIcon">${icon}</div>
+            <div class="eMain">
+              <div class="eLine">
+                <p class="eName">${escapeHtml(it.name)}</p>
+                <p class="eDM">${escapeHtml(formatDM(it.date))}</p>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join("") : ``;
+
+      html += `
+        <div class="monthCard" data-month="${m}">
+          <div class="mBG" style="background-image:url('${bgUrl}')"></div>
+          <div class="mShade"></div>
+
+          <div class="mHead">
+            <div class="mName">🥳 ${monthName(m)}</div>
+            <div class="mBadge">${list.length} 🎂</div>
+          </div>
+
+          <div class="mBody">
+            ${entries}
+          </div>
+        </div>
+      `;
+    }
+
+    monthsEl.innerHTML = html;
+
+    monthsEl.querySelectorAll(".entry[data-id]").forEach(el=>{
+      el.addEventListener("click", ()=>{
+        const id = el.getAttribute("data-id");
+        openView(id);
+      });
+    });
+  }
+
+  function openView(id){
+    const it = data.find(x => x.id === id);
+    if (!it) return;
+
+    viewingId = id;
+
+    const d = new Date(it.date + "T00:00:00");
+    const m = isNaN(d) ? null : d.getMonth();
+    const icon = sexIcon(it.sex);
+
+    viewTitle.textContent = `🎂 ${icon} ${it.name} — ${formatDM(it.date)}`;
+
+    const full = isNaN(d) ? formatDM(it.date) : `${pad2(d.getDate())}/${pad2(d.getMonth()+1)}`;
+
+    viewBody.innerHTML = `
+      <div style="display:grid; gap:10px;">
+        <div style="padding:12px; border-radius:16px; border:1px solid rgba(255,255,255,.12); background: rgba(0,0,0,.22);">
+          <div style="font-weight:1000; font-size:14px;">Mes: <span style="opacity:.9">${m==null ? "—" : monthName(m)}</span></div>
+          <div style="margin-top:8px; font-weight:900; color: rgba(31,36,48,.82);">Fecha guardada: ${escapeHtml(full)}</div>
+        </div>
+        <div style="opacity:.82; font-weight:900; font-size:12.5px;">
+          Nota: En los cuadros solo se muestra <strong>día/mes</strong>.
+        </div>
+      </div>
+    `;
+
+    ovView.classList.add("show");
+  }
+  function closeView(){
+    ovView.classList.remove("show");
+    viewingId = null;
+  }
+
+  function openAdd(){
+    editingId = null;
+    formTitle.textContent = "➕ Agregar cumpleaños";
+    fName.value = "";
+    fDate.value = "";
+    fSex.value = "male";
+    $("#delForm").style.display = "none";
+    ovForm.classList.add("show");
+    setTimeout(()=>fName.focus(), 0);
+  }
+
+  function openEdit(id){
+    const it = data.find(x => x.id === id);
+    if (!it) return;
+    editingId = id;
+    formTitle.textContent = "✏️ Editar cumpleaños";
+    fName.value = it.name || "";
+    fDate.value = it.date || "";
+    fSex.value = it.sex || "male";
+    $("#delForm").style.display = "inline-block";
+    ovForm.classList.add("show");
+    setTimeout(()=>fName.focus(), 0);
+  }
+
+  function closeForm(){
+    ovForm.classList.remove("show");
+    editingId = null;
+  }
+
+  function saveForm(){
+    const name = (fName.value||"").trim();
+    const date = (fDate.value||"").trim();
+    const sex = fSex.value;
+
+    if (!name){ toast("⚠️ Escribe un nombre"); return; }
+    if (!date){ toast("⚠️ Elige una fecha"); return; }
+
+    if (editingId){
+      const i = data.findIndex(x => x.id === editingId);
+      if (i >= 0) data[i] = normalizeItem({ ...data[i], name, date, sex });
+      toast("✅ Guardado");
+    } else {
+      data.unshift(normalizeItem({ id: uid(), name, date, sex }));
+      toast("🎉 Agregado");
+    }
+
+    safeSave(data); // ✅ ahora guarda local + cloud
+    closeForm();
+    render();
+  }
+
+  function deleteById(id){
+    const it = data.find(x => x.id === id);
+    if (!it) return;
+    if (!confirm(`¿Eliminar a "${it.name}" (${formatDM(it.date)})?`)) return;
+
+    data = data.filter(x => x.id !== id);
+    safeSave(data); // ✅ ahora guarda local + cloud
+    toast("🗑️ Eliminado");
+    render();
+  }
+
+  function delForm(){
+    if (!editingId) return;
+    deleteById(editingId);
+    closeForm();
+  }
+
+  function openPass(after){
+    ovPass.classList.add("show");
+    $("#pInput").value = "";
+    setTimeout(()=>$("#pInput").focus(), 0);
+    ovPass._after = after || null;
+  }
+  function closePass(){
+    ovPass.classList.remove("show");
+    ovPass._after = null;
+  }
+  function checkPass(){
+    const v = ($("#pInput").value || "").trim();
+    if (v === EDIT_PASSWORD){
+      unlocked = true;
+      setUnlocked(true);
+      toast("🔓 Edición activada");
+      const after = ovPass._after;
+      closePass();
+      if (typeof after === "function") after();
+      render();
+    } else {
+      toast("❌ Contraseña incorrecta");
+      $("#pInput").focus();
+    }
+  }
+  function guardEdit(fn){
+    if (unlocked) return fn();
+    openPass(fn);
+  }
+
+  $("#btnUnlock").addEventListener("click", ()=> openPass(()=> toast("✅ Listo, ya puedes editar")));
+  $("#btnAdd").addEventListener("click", ()=> guardEdit(openAdd));
+  $("#btnLock").addEventListener("click", ()=>{
+    unlocked = false;
+    setUnlocked(false);
+    toast("🔒 Bloqueado");
+    render();
+  });
+
+  $("#search").addEventListener("input", render);
+
+  $("#xView").addEventListener("click", closeView);
+  $("#closeView").addEventListener("click", closeView);
+
+  $("#editFromView").addEventListener("click", ()=> guardEdit(()=>{
+    const id = viewingId;
+    closeView();
+    openEdit(id);
+  }));
+
+  $("#delFromView").addEventListener("click", ()=> guardEdit(()=>{
+    const id = viewingId;
+    closeView();
+    deleteById(id);
+  }));
+
+  $("#xForm").addEventListener("click", closeForm);
+  $("#cancelForm").addEventListener("click", closeForm);
+  $("#saveForm").addEventListener("click", ()=> guardEdit(saveForm));
+  $("#delForm").addEventListener("click", ()=> guardEdit(delForm));
+
+  $("#xPass").addEventListener("click", closePass);
+  $("#cancelPass").addEventListener("click", closePass);
+  $("#okPass").addEventListener("click", checkPass);
+  $("#pInput").addEventListener("keydown",(e)=>{ if(e.key==="Enter") checkPass(); });
+
+  [ovView, ovForm, ovPass].forEach(ov=>{
+    ov.addEventListener("click",(e)=>{
+      if (e.target === ov) ov.classList.remove("show");
+    });
+  });
+
+  // =========================
+  // ✅ MAMÁ (NUEVO)
+  // =========================
+  const ovMama = $("#ovMama");
+  const ovMamaForm = $("#ovMamaForm");
+  const mamaListEl = $("#mamaList");
+  const mName = $("#mName");
+  const mamaFormTitle = $("#mamaFormTitle");
+  let mamaEditingId = null;
+
+  function mamaLoad(){
+    try{
+      const v = JSON.parse(localStorage.getItem(MAMA_KEY) || "[]");
+      return Array.isArray(v) ? v : [];
+    }catch{ return []; }
+  }
+  function mamaSave(list){
+    try{ localStorage.setItem(MAMA_KEY, JSON.stringify(list)); }
+    catch(e){ toast("No puedo guardar Mamá (storage bloqueado)"); console.error(e); }
+  }
+
+  function renderMama(){
+    const list = mamaLoad().map(x => ({
+      id: String(x?.id || uid()),
+      name: String(x?.name || "").trim()
+    })).filter(x => x.name);
+
+    mamaSave(list);
+
+    if (!list.length){
+      mamaListEl.innerHTML = `<div class="empty"></div>`;
+      return;
+    }
+
+    mamaListEl.innerHTML = list.map(item => `
+      <div class="mItem" data-id="${item.id}">
+        <div class="mAvatar">👩‍👧</div>
+        <div style="flex:1; min-width:0;">
+          <p class="mNameTxt">${escapeHtml(item.name)}</p>
+        </div>
+        <div class="mActions">
+          <button class="btn small primary" data-act="edit">Editar</button>
+          <button class="btn small danger" data-act="del">Eliminar</button>
+        </div>
+      </div>
+    `).join("");
+
+    mamaListEl.querySelectorAll(".mItem").forEach(row=>{
+      const id = row.getAttribute("data-id");
+      row.querySelector('[data-act="edit"]').addEventListener("click", (e)=>{
+        e.stopPropagation();
+        guardEdit(()=> openMamaEdit(id));
+      });
+      row.querySelector('[data-act="del"]').addEventListener("click", (e)=>{
+        e.stopPropagation();
+        guardEdit(()=> mamaDelete(id));
+      });
+    });
+  }
+
+  function openMama(){
+    renderMama();
+    ovMama.classList.add("show");
+  }
+  function closeMama(){
+    ovMama.classList.remove("show");
+  }
+
+  function openMamaAdd(){
+    mamaEditingId = null;
+    mamaFormTitle.textContent = "➕ Agregar a Mamá";
+    mName.value = "";
+    $("#mDelete").style.display = "none";
+    ovMamaForm.classList.add("show");
+    setTimeout(()=>mName.focus(), 0);
+  }
+
+  function openMamaEdit(id){
+    const list = mamaLoad();
+    const it = list.find(x => x.id === id);
+    if (!it) return;
+    mamaEditingId = id;
+    mamaFormTitle.textContent = "✏️ Editar (Mamá)";
+    mName.value = it.name || "";
+    $("#mDelete").style.display = "inline-block";
+    ovMamaForm.classList.add("show");
+    setTimeout(()=>mName.focus(), 0);
+  }
+
+  function closeMamaForm(){
+    ovMamaForm.classList.remove("show");
+    mamaEditingId = null;
+  }
+
+  function mamaSaveForm(){
+    const name = (mName.value || "").trim();
+    if (!name){ toast("⚠️ Escribe un nombre"); return; }
+
+    const list = mamaLoad();
+
+    if (mamaEditingId){
+      const i = list.findIndex(x => x.id === mamaEditingId);
+      if (i >= 0) list[i] = { ...list[i], name };
+      toast("✅ Guardado (Mamá)");
+    } else {
+      list.unshift({ id: uid(), name });
+      toast("🎉 Agregado (Mamá)");
+    }
+
+    mamaSave(list);
+    closeMamaForm();
+    renderMama();
+  }
+
+  function mamaDelete(id){
+    const list = mamaLoad();
+    const it = list.find(x => x.id === id);
+    if (!it) return;
+    if (!confirm(`¿Eliminar a "${it.name}"?`)) return;
+    mamaSave(list.filter(x => x.id !== id));
+    toast("🗑️ Eliminado (Mamá)");
+    renderMama();
+  }
+
+  function mamaDelFromForm(){
+    if (!mamaEditingId) return;
+    mamaDelete(mamaEditingId);
+    closeMamaForm();
+  }
+
+  $("#btnMama").addEventListener("click", openMama);
+  $("#btnMamaAdd").addEventListener("click", ()=> guardEdit(openMamaAdd));
+  $("#closeMama").addEventListener("click", closeMama);
+  $("#xMama").addEventListener("click", closeMama);
+
+  $("#xMamaForm").addEventListener("click", closeMamaForm);
+  $("#mCancel").addEventListener("click", closeMamaForm);
+  $("#mSave").addEventListener("click", ()=> guardEdit(mamaSaveForm));
+  $("#mDelete").addEventListener("click", ()=> guardEdit(mamaDelFromForm));
+
+  render();
+})();
+</script>
+
 </body>
 </html>
