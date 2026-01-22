@@ -261,7 +261,6 @@ background: rgba(255,255,255,.64); color:#1f2430; font-weight: 980; font-size: 1
     background: rgba(255,255,255,.65);
     font-weight: 900;
     font-size: 12.5px;
-    white-space: pre-wrap;
   }
 
   .footer{ padding: 12px 16px 16px; border-top:1px solid rgba(0,0,0,.06);
@@ -391,113 +390,116 @@ background: rgba(255,255,255,.64); }
     .eName{ max-width: 100%; }
   }
 
-@media (max-width: 520px){
-  .monthCard{ min-height: 200px; }
-  .mBody{ padding: 10px 10px 12px; }
+  /* ===== MOBILE FIX (Yan): nombre + fecha visibles y sin borde rayado ===== */
+  @media (max-width: 520px){
+    .monthCard{ min-height: 200px; }
+    .mBody{ padding: 10px 10px 12px; }
 
-  .entry{
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
-    padding: 10px 10px;
+    .entry{
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 10px 10px;
+    }
+
+    .eIcon{
+      width: 28px;
+      height: 28px;
+      border-radius: 12px;
+      font-size: 15px;
+      margin-top: 0;
+    }
+
+    .eMain{ width: 100%; min-width: 0; }
+    .eLine{
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: nowrap;
+      min-width: 0;
+    }
+
+    .eName{
+      white-space: normal !important;
+      overflow: visible !important;
+      text-overflow: clip !important;
+      display: block;
+      max-width: 70%;
+      line-height: 1.15;
+      font-size: 13.5px;
+    }
+
+    .eDM{
+      flex: 0 0 auto;
+      white-space: nowrap;
+      font-size: 12.5px;
+      padding: 4px 8px;
+      border-radius: 999px;
+    }
+
+    .empty{
+      text-align: center;
+      padding: 12px 10px;
+    }
   }
 
-  .eIcon{
-    width: 28px;
-    height: 28px;
-    border-radius: 12px;
-    font-size: 15px;
-    margin-top: 0;
-  }
+  .entry, .eMain, .eLine{ min-width: 0; }
 
-  .eMain{ width: 100%; min-width: 0; }
-  .eLine{
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 10px;
-    flex-wrap: nowrap;
-    min-width: 0;
-  }
+  /* ====== MOBILE POLISH (Yan): tarjetas por persona + scroll suave por mes ====== */
+  @media (max-width: 520px){
+    .monthCard{ min-height: 220px; }
+    .mBody{
+      max-height: 260px;
+      overflow: auto;
+      padding: 10px 10px 12px;
+      scrollbar-width: thin;
+    }
+    .mBody::-webkit-scrollbar{ width: 8px; }
+    .mBody::-webkit-scrollbar-thumb{
+      background: rgba(0,0,0,.12);
+      border-radius: 999px;
+    }
 
-  .eName{
-    white-space: normal !important;
-    overflow: visible !important;
-    text-overflow: clip !important;
-    display: block;
-    max-width: 70%;
-    line-height: 1.15;
-    font-size: 13.5px;
-  }
-
-  .eDM{
-    flex: 0 0 auto;
-    white-space: nowrap;
-    font-size: 12.5px;
-    padding: 4px 8px;
-    border-radius: 999px;
+    .entry{
+      padding: 10px 10px 10px 10px;
+      gap: 8px;
+      border-radius: 16px;
+    }
+    .eLine{
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 6px;
+    }
+    .eName{
+      max-width: 100% !important;
+      font-size: 14px;
+      line-height: 1.15;
+    }
+    .eDM{
+      font-size: 12.5px;
+      padding: 4px 10px;
+    }
   }
 
   .empty{
-    text-align: center;
-    padding: 12px 10px;
-  }
-}
-
-.entry, .eMain, .eLine{ min-width: 0; }
-
-@media (max-width: 520px){
-  .monthCard{ min-height: 220px; }
-  .mBody{
-    max-height: 260px;
-    overflow: auto;
-    padding: 10px 10px 12px;
-    scrollbar-width: thin;
-  }
-  .mBody::-webkit-scrollbar{ width: 8px; }
-  .mBody::-webkit-scrollbar-thumb{
-    background: rgba(0,0,0,.12);
-    border-radius: 999px;
+    border: 1px solid rgba(0,0,0,.08) !important;
+    background: rgba(255,255,255,.70) !important;
+    color: rgba(31,36,48,.72) !important;
   }
 
-  .entry{
-    padding: 10px 10px 10px 10px;
-    gap: 8px;
-    border-radius: 16px;
+  body::after{
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.06);
+    pointer-events: none;
+    z-index: 0;
   }
-  .eLine{
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 6px;
-  }
-  .eName{
-    max-width: 100% !important;
-    font-size: 14px;
-    line-height: 1.15;
-  }
-  .eDM{
-    font-size: 12.5px;
-    padding: 4px 10px;
-  }
-}
-
-.empty{
-  border: 1px solid rgba(0,0,0,.08) !important;
-  background: rgba(255,255,255,.70) !important;
-  color: rgba(31,36,48,.72) !important;
-}
-
-body::after{
-  content: "";
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,.06);
-  pointer-events: none;
-  z-index: 0;
-}
 </style>
 </head>
+
 <body>
 <div class="bgMove" aria-hidden="true"></div>
 
@@ -506,7 +508,7 @@ body::after{
     <div class="header">
       <div class="topRow">
         <div style="min-width:0">
-          <h1 class="title">𝕮𝖆𝖑𝖊𝖓𝖉𝖆𝖗𝖎𝖔 𝖉𝖊 𝕮𝖚𝖒𝖑𝖊𝖆ñ𝖔𝖘</h1>
+          <h1 class="title">𝕮𝖆𝖑𝖊𝖓𝖉𝖆𝖗𝖎𝖔 𝖉𝖊 𝕮𝖚𝖒𝖕𝖑𝖊𝖆ñ𝖔𝖘</h1>
           <div class="sub">
             <span id="statsTxt">Total: 0 • Próximos: 0 esta semana • 0 este mes</span>
             <span style="opacity:.55;">•</span>
@@ -663,78 +665,16 @@ body::after{
 
 <script>
 (() => {
-  const STORAGE_KEY = "bday_calendar_12months_v1";
+  // ============================================
+  // ✅ CONECTADO A GOOGLE SHEETS (GAS) - SIN CORS
+  // ============================================
+  const API_URL = "https://script.google.com/macros/s/AKfycbyoF11xC6GUXlwkhSsL9vpGz7b3tJkZmlA6rHG93xkXn_RqcqRpXugove9OIq75orhkNw/exec";
+
   const LOCK_KEY = "bday_calendar_12months_lock_v1";
   const EDIT_PASSWORD = "1960"; // TU CONTRASEÑA
 
-  // ✅ NUEVO: almacenamiento para Mamá
+  // ✅ Mamá sigue local (si quieres que también sea global, me lo dices y lo subimos al sheet)
   const MAMA_KEY = "mama_list_v1";
-
-  // =========================
-  // ✅ CLOUD (Google Apps Script) - (Yan) SOLO ESTO SE AGREGÓ
-  // =========================
-  const API_URL = "https://script.google.com/macros/s/AKfycbyoF11xC6GUXlwkhSsL9vpGz7b3tJkZmlA6rHG93xkXn_RqcqRpXugove9OIq75orhkNw/exec";
-
-  // JSONP helper (evita CORS)
-  function jsonp(params){
-    return new Promise((resolve, reject)=>{
-      const cb = "__cb_" + Math.random().toString(16).slice(2);
-      const url = API_URL + (API_URL.includes("?") ? "&" : "?") + params + "&callback=" + cb;
-
-      const s = document.createElement("script");
-      const t = setTimeout(()=>{
-        cleanup();
-        reject(new Error("Tiempo de espera (JSONP)"));
-      }, 12000);
-
-      function cleanup(){
-        clearTimeout(t);
-        try{ delete window[cb]; } catch(e){ window[cb] = undefined; }
-        if (s && s.parentNode) s.parentNode.removeChild(s);
-      }
-
-      window[cb] = (data)=>{
-        cleanup();
-        resolve(data);
-      };
-
-      s.onerror = ()=>{
-        cleanup();
-        reject(new Error("No cargó el script (JSONP)"));
-      };
-
-      s.src = url;
-      document.head.appendChild(s);
-    });
-  }
-
-  async function cloudPull(){
-    try{
-      const res = await jsonp("action=list");
-      if (!res || res.ok !== true) return;
-
-      if (Array.isArray(res.items)){
-        data = res.items.map(normalizeItem).filter(x => x.name && x.date);
-        safeSaveLocalOnly(data); // cache local
-        render();
-        toast("☁️ Sincronizado");
-      }
-    }catch(e){
-      console.warn("cloudPull:", e);
-    }
-  }
-
-  async function cloudPush(list){
-    try{
-      const payload = encodeURIComponent(btoa(unescape(encodeURIComponent(JSON.stringify(list || [])))));
-      const res = await jsonp("action=save&payload=" + payload);
-      if (res && res.ok === true) {
-        // ok
-      }
-    }catch(e){
-      console.warn("cloudPush:", e);
-    }
-  }
 
   const $ = (s) => document.querySelector(s);
   const toastEl = $("#toast");
@@ -752,42 +692,109 @@ body::after{
     toastEl._t = setTimeout(()=>toastEl.classList.remove("show"), 2200);
   }
 
-  function safeLoad(){
-    try{
-      const v = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
-      return Array.isArray(v) ? v : [];
-    }catch{ return []; }
-  }
-
-  // ✅ CAMBIO: se separa local-only y luego save normal que también sube a la nube
-  function safeSaveLocalOnly(data){
-    try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }
-    catch(e){ toast("No puedo guardar (storage bloqueado)"); console.error(e); }
-  }
-  function safeSave(data){
-    safeSaveLocalOnly(data);
-    cloudPush(data); // ✅ sube a Google
-  }
-
-  function loadUnlocked(){ return localStorage.getItem(LOCK_KEY) === "1"; }
-  function setUnlocked(v){ localStorage.setItem(LOCK_KEY, v ? "1" : "0"); }
-  function uid(){ return Math.random().toString(16).slice(2) + Date.now().toString(16); }
-
   function pad2(n){ return String(n).padStart(2,"0"); }
-  function formatDM(iso){
-    const p = String(iso).split("-");
-    if (p.length !== 3) return iso;
-    return `${p[2]}/${p[1]}`; // dd/mm
-  }
+
   function monthName(m){
     return ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sept","Oct","Nov","Dic"][m];
   }
+
+  function monthIndexFromAbbr(abbr){
+    const map = {Ene:0,Feb:1,Mar:2,Abr:3,May:4,Jun:5,Jul:6,Ago:7,Sept:8,Oct:9,Nov:10,Dic:11};
+    return (abbr in map) ? map[abbr] : null;
+  }
+
   function escapeHtml(s){
     return String(s)
       .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
       .replaceAll('"',"&quot;").replaceAll("'","&#039;");
   }
 
+  function formatDM(iso){
+    const p = String(iso).split("-");
+    if (p.length !== 3) return iso;
+    return `${p[2]}/${p[1]}`; // dd/mm
+  }
+
+  // -------- JSONP (evita CORS) --------
+  function jsonp(url){
+    return new Promise((resolve, reject) => {
+      const cb = "__cb_" + Math.random().toString(16).slice(2);
+      const script = document.createElement("script");
+      const sep = url.includes("?") ? "&" : "?";
+      const full = url + sep + "callback=" + cb;
+
+      const t = setTimeout(() => {
+        cleanup();
+        reject(new Error("Timeout llamando API"));
+      }, 15000);
+
+      function cleanup(){
+        clearTimeout(t);
+        try{ delete window[cb]; }catch{}
+        if (script && script.parentNode) script.parentNode.removeChild(script);
+      }
+
+      window[cb] = (data) => {
+        cleanup();
+        resolve(data);
+      };
+
+      script.onerror = () => {
+        cleanup();
+        reject(new Error("No pude cargar el script JSONP (red/permiso)"));
+      };
+
+      script.src = full;
+      document.body.appendChild(script);
+    });
+  }
+
+  function qs(obj){
+    const p = new URLSearchParams();
+    Object.entries(obj).forEach(([k,v]) => {
+      if (v === undefined || v === null) return;
+      p.set(k, String(v));
+    });
+    return p.toString();
+  }
+
+  async function apiList(){
+    const url = API_URL + "?" + qs({ action: "list" });
+    const res = await jsonp(url);
+    if (!res || !res.ok) throw new Error(res?.error || "Error list");
+    return Array.isArray(res.items) ? res.items : [];
+  }
+
+  async function apiUpsert({ id, name, isoDate }){
+    // isoDate: "YYYY-MM-DD" -> mandamos al sheet como DD/MM y month Abbr
+    const d = new Date(isoDate + "T00:00:00");
+    if (isNaN(d)) throw new Error("Fecha inválida");
+    const day = pad2(d.getDate());
+    const mon = d.getMonth();
+    const dateDM = `${day}/${pad2(mon+1)}`;
+    const month = monthName(mon);
+
+    const url = API_URL + "?" + qs({
+      action: "upsert",
+      id: id || "",
+      name,
+      date: dateDM,
+      month
+    });
+
+    const res = await jsonp(url);
+    if (!res || !res.ok) throw new Error(res?.error || "Error upsert");
+    return String(res.id || id || "");
+  }
+
+  async function apiDelete(id){
+    const url = API_URL + "?" + qs({ action: "delete", id });
+    const res = await jsonp(url);
+    if (!res || !res.ok) throw new Error(res?.error || "Error delete");
+    return !!res.deleted;
+  }
+
+  // -------- UI refs --------
   const monthsEl = $("#months");
   const searchEl = $("#search");
   const statsTxt = $("#statsTxt");
@@ -805,25 +812,22 @@ body::after{
   const fDate = $("#fDate");
   const fSex = $("#fSex");
 
-  let data = safeLoad();
+  // -------- Datos (GLOBAL en sheet) --------
+  let data = [];
 
-  // ✅ NUEVO: trae data global para que tu amigo vea lo mismo
-  cloudPull();
-
-  /* IMPORTANTE: Arranca BLOQUEADO si no hay lock guardado */
-  if (localStorage.getItem(LOCK_KEY) == null) setUnlocked(false);
-
-  let unlocked = loadUnlocked();
+  // Arranca bloqueado si no hay lock guardado (solo en este navegador)
+  if (localStorage.getItem(LOCK_KEY) == null) localStorage.setItem(LOCK_KEY, "0");
+  let unlocked = localStorage.getItem(LOCK_KEY) === "1";
 
   let viewingId = null;
   let editingId = null;
 
-  // ✅ FIX: permitir "mama" sin convertirlo en "male"
+  function uid(){ return Math.random().toString(16).slice(2) + Date.now().toString(16); }
+
   function normalizeItem(it){
-    const date = String(it?.date || "").trim();
+    const date = String(it?.date || "").trim(); // ISO yyyy-mm-dd
     const sex0 = String(it?.sex || "male").trim(); // male | female | mama
     const sex = (sex0 === "female" || sex0 === "mama") ? sex0 : "male";
-
     return {
       id: String(it?.id || uid()),
       name: String(it?.name || "").trim(),
@@ -832,8 +836,29 @@ body::after{
     };
   }
 
-  data = data.map(normalizeItem).filter(x => x.name && x.date);
-  safeSaveLocalOnly(data);
+  function remoteToLocal(remote){
+    // remote: {id, name, date:"DD/MM", month:"Ene"...}
+    const id = String(remote?.id || "").trim();
+    const name = String(remote?.name || "").trim();
+    const dateDM = String(remote?.date || "").trim();   // DD/MM
+    const mAbbr = String(remote?.month || "").trim();   // Ene, Feb...
+    const sex = String(remote?.sex || "male").trim();   // no viene del sheet (pero por si acaso)
+    if (!id || !name || !dateDM) return null;
+
+    const parts = dateDM.split("/");
+    const dd = parts[0] ? pad2(parseInt(parts[0],10) || 1) : "01";
+    let mi = monthIndexFromAbbr(mAbbr);
+    if (mi === null){
+      // si no vino month, sacamos del MM del dateDM
+      const mm = parts[1] ? (parseInt(parts[1],10) || 1) : 1;
+      mi = Math.max(0, Math.min(11, mm-1));
+    }
+    const iso = `2000-${pad2(mi+1)}-${dd}`; // año fijo (no se muestra)
+    return normalizeItem({ id, name, date: iso, sex });
+  }
+
+  function loadUnlocked(){ return localStorage.getItem(LOCK_KEY) === "1"; }
+  function setUnlocked(v){ localStorage.setItem(LOCK_KEY, v ? "1" : "0"); }
 
   function updateStats(){
     const t = new Date();
@@ -957,6 +982,7 @@ body::after{
 
     viewTitle.textContent = `🎂 ${icon} ${it.name} — ${formatDM(it.date)}`;
 
+    // sin año (solo dd/mm)
     const full = isNaN(d) ? formatDM(it.date) : `${pad2(d.getDate())}/${pad2(d.getMonth()+1)}`;
 
     viewBody.innerHTML = `
@@ -1007,37 +1033,71 @@ body::after{
     editingId = null;
   }
 
-  function saveForm(){
-    const name = (fName.value||"").trim();
-    const date = (fDate.value||"").trim();
-    const sex = fSex.value;
-
-    if (!name){ toast("⚠️ Escribe un nombre"); return; }
-    if (!date){ toast("⚠️ Elige una fecha"); return; }
-
-    if (editingId){
-      const i = data.findIndex(x => x.id === editingId);
-      if (i >= 0) data[i] = normalizeItem({ ...data[i], name, date, sex });
-      toast("✅ Guardado");
-    } else {
-      data.unshift(normalizeItem({ id: uid(), name, date, sex }));
-      toast("🎉 Agregado");
+  async function reloadFromServer(){
+    try{
+      errbar.classList.remove("show");
+      const items = await apiList();
+      const mapped = items.map(remoteToLocal).filter(Boolean);
+      data = mapped;
+      render();
+    }catch(e){
+      errbar.classList.add("show");
+      errbar.textContent = "ERROR API: " + (e?.message || e);
     }
-
-    safeSave(data); // ✅ ahora guarda local + cloud
-    closeForm();
-    render();
   }
 
-  function deleteById(id){
+  // ✅ Guardar en GOOGLE SHEETS (para que se vea en todos los teléfonos)
+  async function saveForm(){
+    const name = (fName.value||"").trim();
+    const isoDate = (fDate.value||"").trim(); // yyyy-mm-dd
+    const sex = fSex.value; // "male" | "female" | "mama"
+
+    if (!name){ toast("⚠️ Escribe un nombre"); return; }
+    if (!isoDate){ toast("⚠️ Elige una fecha"); return; }
+
+    try{
+      const idToUse = editingId || "";
+      const newId = await apiUpsert({ id: idToUse, name, isoDate });
+
+      // Actualiza local y re-render
+      if (editingId){
+        const i = data.findIndex(x => x.id === editingId);
+        if (i >= 0) data[i] = normalizeItem({ ...data[i], id: newId, name, date: isoDate, sex });
+        toast("✅ Guardado");
+      } else {
+        data.unshift(normalizeItem({ id: newId, name, date: isoDate, sex }));
+        toast("🎉 Agregado");
+      }
+
+      closeForm();
+      render();
+
+      // Refresca desde servidor (por si hay cambios)
+      setTimeout(reloadFromServer, 400);
+
+    }catch(e){
+      errbar.classList.add("show");
+      errbar.textContent = "ERROR GUARDANDO: " + (e?.message || e);
+      toast("❌ No se pudo guardar");
+    }
+  }
+
+  async function deleteById(id){
     const it = data.find(x => x.id === id);
     if (!it) return;
     if (!confirm(`¿Eliminar a "${it.name}" (${formatDM(it.date)})?`)) return;
 
-    data = data.filter(x => x.id !== id);
-    safeSave(data); // ✅ ahora guarda local + cloud
-    toast("🗑️ Eliminado");
-    render();
+    try{
+      await apiDelete(id);
+      data = data.filter(x => x.id !== id);
+      toast("🗑️ Eliminado");
+      render();
+      setTimeout(reloadFromServer, 400);
+    }catch(e){
+      errbar.classList.add("show");
+      errbar.textContent = "ERROR ELIMINANDO: " + (e?.message || e);
+      toast("❌ No se pudo eliminar");
+    }
   }
 
   function delForm(){
@@ -1076,6 +1136,7 @@ body::after{
     openPass(fn);
   }
 
+  // Buttons
   $("#btnUnlock").addEventListener("click", ()=> openPass(()=> toast("✅ Listo, ya puedes editar")));
   $("#btnAdd").addEventListener("click", ()=> guardEdit(openAdd));
   $("#btnLock").addEventListener("click", ()=>{
@@ -1085,8 +1146,10 @@ body::after{
     render();
   });
 
+  // Search
   $("#search").addEventListener("input", render);
 
+  // View modal controls
   $("#xView").addEventListener("click", closeView);
   $("#closeView").addEventListener("click", closeView);
 
@@ -1102,16 +1165,19 @@ body::after{
     deleteById(id);
   }));
 
+  // Form controls
   $("#xForm").addEventListener("click", closeForm);
   $("#cancelForm").addEventListener("click", closeForm);
   $("#saveForm").addEventListener("click", ()=> guardEdit(saveForm));
   $("#delForm").addEventListener("click", ()=> guardEdit(delForm));
 
+  // Password controls
   $("#xPass").addEventListener("click", closePass);
   $("#cancelPass").addEventListener("click", closePass);
   $("#okPass").addEventListener("click", checkPass);
   $("#pInput").addEventListener("keydown",(e)=>{ if(e.key==="Enter") checkPass(); });
 
+  // click outside closes
   [ovView, ovForm, ovPass].forEach(ov=>{
     ov.addEventListener("click",(e)=>{
       if (e.target === ov) ov.classList.remove("show");
@@ -1119,7 +1185,7 @@ body::after{
   });
 
   // =========================
-  // ✅ MAMÁ (NUEVO)
+  // ✅ MAMÁ (LOCAL)
   // =========================
   const ovMama = $("#ovMama");
   const ovMamaForm = $("#ovMamaForm");
@@ -1248,17 +1314,22 @@ body::after{
     closeMamaForm();
   }
 
+  // Botón Mamá
   $("#btnMama").addEventListener("click", openMama);
   $("#btnMamaAdd").addEventListener("click", ()=> guardEdit(openMamaAdd));
   $("#closeMama").addEventListener("click", closeMama);
   $("#xMama").addEventListener("click", closeMama);
 
+  // Form Mamá
   $("#xMamaForm").addEventListener("click", closeMamaForm);
   $("#mCancel").addEventListener("click", closeMamaForm);
   $("#mSave").addEventListener("click", ()=> guardEdit(mamaSaveForm));
   $("#mDelete").addEventListener("click", ()=> guardEdit(mamaDelFromForm));
 
+  // ✅ CARGA INICIAL DESDE EL SHEET (GLOBAL)
   render();
+  toast("⏳ Cargando calendario…");
+  reloadFromServer();
 })();
 </script>
 
