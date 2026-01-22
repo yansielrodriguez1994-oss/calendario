@@ -70,6 +70,13 @@
 
   <script>
     const lista = document.getElementById("lista");
+    // Cargar notas guardadas
+const guardado = JSON.parse(localStorage.getItem("notasYan") || "[]");
+guardado.forEach(t => {
+  const li = document.createElement("li");
+  li.textContent = t;
+  lista.appendChild(li);
+});
 
     function agregar(){
       const texto = document.getElementById("texto");
@@ -78,6 +85,12 @@
       const li = document.createElement("li");
       li.textContent = texto.value;
       lista.appendChild(li);
+      // Guardar notas
+const notas = [];
+document.querySelectorAll("#lista li").forEach(li => {
+  notas.push(li.textContent);
+});
+localStorage.setItem("notasYan", JSON.stringify(notas));
 
       texto.value="";
     }
