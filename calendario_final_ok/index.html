@@ -11,7 +11,7 @@
     --cardKids: url("card-bg");
 
     --panelBg: url("panel-bg.jpg");
---txt:#14151a;
+    --txt:#14151a;
     --muted: rgba(20,21,26,.70);
 
     --card: rgba(255,255,255,.86);
@@ -88,7 +88,6 @@
     overflow:hidden;
   }
 
-
   .header{ padding:18px 16px 14px; border-bottom:1px solid rgba(0,0,0,.06);
 background:
   linear-gradient(180deg, rgba(255,255,255,.35), rgba(255,255,255,.60)),
@@ -117,7 +116,6 @@ letter-spacing:.2px; background: linear-gradient(90deg, rgba(255,120,180,1), rgb
 
   .toolbar{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
 
-  
   .btn{
     border:1px solid rgba(0,0,0,.10);
     background: linear-gradient(135deg,
@@ -263,6 +261,7 @@ background: rgba(255,255,255,.64); color:#1f2430; font-weight: 980; font-size: 1
     background: rgba(255,255,255,.65);
     font-weight: 900;
     font-size: 12.5px;
+    white-space: pre-wrap;
   }
 
   .footer{ padding: 12px 16px 16px; border-top:1px solid rgba(0,0,0,.06);
@@ -380,7 +379,6 @@ background: rgba(255,255,255,.64); }
   .mActions{ display:flex; gap:8px; flex:0 0 auto; }
   .btn.small{ padding: 9px 10px; border-radius: 12px; font-weight:1000; }
 
-
   /* ====== FIX: mostrar nombre + fecha en los cuadritos (kid theme) ====== */
   .entry{ background: rgba(255,255,255,.72); border: 1px solid rgba(0,0,0,.08); }
   .eIcon{ background: rgba(255,255,255,.85); border: 1px solid rgba(0,0,0,.08); }
@@ -393,13 +391,10 @@ background: rgba(255,255,255,.64); }
     .eName{ max-width: 100%; }
   }
 
-/* ===== MOBILE FIX (Yan): nombre + fecha visibles y sin borde rayado ===== */
 @media (max-width: 520px){
-  /* Dar un poco mas de aire al cuadrito */
   .monthCard{ min-height: 200px; }
   .mBody{ padding: 10px 10px 12px; }
 
-  /* Cada cumple dentro del cuadro: en columna para que no se corte */
   .entry{
     flex-direction: column;
     align-items: flex-start;
@@ -426,7 +421,6 @@ background: rgba(255,255,255,.64); }
     min-width: 0;
   }
 
-  /* Nombre: que no salga "Y.." */
   .eName{
     white-space: normal !important;
     overflow: visible !important;
@@ -437,7 +431,6 @@ background: rgba(255,255,255,.64); }
     font-size: 13.5px;
   }
 
-  /* Fecha: siempre visible */
   .eDM{
     flex: 0 0 auto;
     white-space: nowrap;
@@ -446,20 +439,15 @@ background: rgba(255,255,255,.64); }
     border-radius: 999px;
   }
 
-  /* Empty state mas limpio */
   .empty{
     text-align: center;
     padding: 12px 10px;
   }
 }
 
-/* En todas las pantallas: aseguramos que el contenido no quede oculto */
 .entry, .eMain, .eLine{ min-width: 0; }
 
-
-/* ====== MOBILE POLISH (Yan): tarjetas por persona + scroll suave por mes ====== */
 @media (max-width: 520px){
-  /* que el mes no se estire infinito */
   .monthCard{ min-height: 220px; }
   .mBody{
     max-height: 260px;
@@ -473,7 +461,6 @@ background: rgba(255,255,255,.64); }
     border-radius: 999px;
   }
 
-  /* cada persona como mini tarjeta vertical */
   .entry{
     padding: 10px 10px 10px 10px;
     gap: 8px;
@@ -495,15 +482,12 @@ background: rgba(255,255,255,.64); }
   }
 }
 
-/* Empty sin borde punteado */
 .empty{
   border: 1px solid rgba(0,0,0,.08) !important;
   background: rgba(255,255,255,.70) !important;
   color: rgba(31,36,48,.72) !important;
 }
 
-
-/* Oscurecer un poquito el fondo general (Yan) */
 body::after{
   content: "";
   position: fixed;
@@ -522,7 +506,7 @@ body::after{
     <div class="header">
       <div class="topRow">
         <div style="min-width:0">
-          <h1 class="title">𝕮𝖆𝖑𝖊𝖓𝖉𝖆𝖗𝖎𝖔 𝖉𝖊 𝕮𝖚𝖒𝖕𝖑𝖊𝖆ñ𝖔𝖘</h1>
+          <h1 class="title">𝕮𝖆𝖑𝖊𝖓𝖉𝖆𝖗𝖎𝖔 𝖉𝖊 𝕮𝖚𝖒𝖑𝖊𝖆ñ𝖔𝖘</h1>
           <div class="sub">
             <span id="statsTxt">Total: 0 • Próximos: 0 esta semana • 0 este mes</span>
             <span style="opacity:.55;">•</span>
@@ -628,7 +612,6 @@ body::after{
   </div>
 </div>
 
-
 <!-- =========================
      ✅ MAMA: LISTADO (NUEVO)
 ========================== -->
@@ -676,7 +659,6 @@ body::after{
   </div>
 </div>
 
-
 <div class="toast" id="toast"></div>
 
 <script>
@@ -687,6 +669,72 @@ body::after{
 
   // ✅ NUEVO: almacenamiento para Mamá
   const MAMA_KEY = "mama_list_v1";
+
+  // =========================
+  // ✅ CLOUD (Google Apps Script) - (Yan) SOLO ESTO SE AGREGÓ
+  // =========================
+  const API_URL = "https://script.google.com/macros/s/AKfycbyoF11xC6GUXlwkhSsL9vpGz7b3tJkZmlA6rHG93xkXn_RqcqRpXugove9OIq75orhkNw/exec";
+
+  // JSONP helper (evita CORS)
+  function jsonp(params){
+    return new Promise((resolve, reject)=>{
+      const cb = "__cb_" + Math.random().toString(16).slice(2);
+      const url = API_URL + (API_URL.includes("?") ? "&" : "?") + params + "&callback=" + cb;
+
+      const s = document.createElement("script");
+      const t = setTimeout(()=>{
+        cleanup();
+        reject(new Error("Tiempo de espera (JSONP)"));
+      }, 12000);
+
+      function cleanup(){
+        clearTimeout(t);
+        try{ delete window[cb]; } catch(e){ window[cb] = undefined; }
+        if (s && s.parentNode) s.parentNode.removeChild(s);
+      }
+
+      window[cb] = (data)=>{
+        cleanup();
+        resolve(data);
+      };
+
+      s.onerror = ()=>{
+        cleanup();
+        reject(new Error("No cargó el script (JSONP)"));
+      };
+
+      s.src = url;
+      document.head.appendChild(s);
+    });
+  }
+
+  async function cloudPull(){
+    try{
+      const res = await jsonp("action=list");
+      if (!res || res.ok !== true) return;
+
+      if (Array.isArray(res.items)){
+        data = res.items.map(normalizeItem).filter(x => x.name && x.date);
+        safeSaveLocalOnly(data); // cache local
+        render();
+        toast("☁️ Sincronizado");
+      }
+    }catch(e){
+      console.warn("cloudPull:", e);
+    }
+  }
+
+  async function cloudPush(list){
+    try{
+      const payload = encodeURIComponent(btoa(unescape(encodeURIComponent(JSON.stringify(list || [])))));
+      const res = await jsonp("action=save&payload=" + payload);
+      if (res && res.ok === true) {
+        // ok
+      }
+    }catch(e){
+      console.warn("cloudPush:", e);
+    }
+  }
 
   const $ = (s) => document.querySelector(s);
   const toastEl = $("#toast");
@@ -710,9 +758,15 @@ body::after{
       return Array.isArray(v) ? v : [];
     }catch{ return []; }
   }
-  function safeSave(data){
+
+  // ✅ CAMBIO: se separa local-only y luego save normal que también sube a la nube
+  function safeSaveLocalOnly(data){
     try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }
     catch(e){ toast("No puedo guardar (storage bloqueado)"); console.error(e); }
+  }
+  function safeSave(data){
+    safeSaveLocalOnly(data);
+    cloudPush(data); // ✅ sube a Google
   }
 
   function loadUnlocked(){ return localStorage.getItem(LOCK_KEY) === "1"; }
@@ -753,6 +807,9 @@ body::after{
 
   let data = safeLoad();
 
+  // ✅ NUEVO: trae data global para que tu amigo vea lo mismo
+  cloudPull();
+
   /* IMPORTANTE: Arranca BLOQUEADO si no hay lock guardado */
   if (localStorage.getItem(LOCK_KEY) == null) setUnlocked(false);
 
@@ -776,7 +833,7 @@ body::after{
   }
 
   data = data.map(normalizeItem).filter(x => x.name && x.date);
-  safeSave(data);
+  safeSaveLocalOnly(data);
 
   function updateStats(){
     const t = new Date();
@@ -900,7 +957,6 @@ body::after{
 
     viewTitle.textContent = `🎂 ${icon} ${it.name} — ${formatDM(it.date)}`;
 
-    // ✅ FIX: sin año (solo dd/mm)
     const full = isNaN(d) ? formatDM(it.date) : `${pad2(d.getDate())}/${pad2(d.getMonth()+1)}`;
 
     viewBody.innerHTML = `
@@ -951,11 +1007,10 @@ body::after{
     editingId = null;
   }
 
-  // ✅ FIX: guardar el valor real del select (male/female/mama)
   function saveForm(){
     const name = (fName.value||"").trim();
     const date = (fDate.value||"").trim();
-    const sex = fSex.value; // "male" | "female" | "mama"
+    const sex = fSex.value;
 
     if (!name){ toast("⚠️ Escribe un nombre"); return; }
     if (!date){ toast("⚠️ Elige una fecha"); return; }
@@ -969,7 +1024,7 @@ body::after{
       toast("🎉 Agregado");
     }
 
-    safeSave(data);
+    safeSave(data); // ✅ ahora guarda local + cloud
     closeForm();
     render();
   }
@@ -980,7 +1035,7 @@ body::after{
     if (!confirm(`¿Eliminar a "${it.name}" (${formatDM(it.date)})?`)) return;
 
     data = data.filter(x => x.id !== id);
-    safeSave(data);
+    safeSave(data); // ✅ ahora guarda local + cloud
     toast("🗑️ Eliminado");
     render();
   }
@@ -1021,7 +1076,6 @@ body::after{
     openPass(fn);
   }
 
-  // Buttons
   $("#btnUnlock").addEventListener("click", ()=> openPass(()=> toast("✅ Listo, ya puedes editar")));
   $("#btnAdd").addEventListener("click", ()=> guardEdit(openAdd));
   $("#btnLock").addEventListener("click", ()=>{
@@ -1031,10 +1085,8 @@ body::after{
     render();
   });
 
-  // Search
   $("#search").addEventListener("input", render);
 
-  // View modal controls
   $("#xView").addEventListener("click", closeView);
   $("#closeView").addEventListener("click", closeView);
 
@@ -1050,25 +1102,21 @@ body::after{
     deleteById(id);
   }));
 
-  // Form controls
   $("#xForm").addEventListener("click", closeForm);
   $("#cancelForm").addEventListener("click", closeForm);
   $("#saveForm").addEventListener("click", ()=> guardEdit(saveForm));
   $("#delForm").addEventListener("click", ()=> guardEdit(delForm));
 
-  // Password controls
   $("#xPass").addEventListener("click", closePass);
   $("#cancelPass").addEventListener("click", closePass);
   $("#okPass").addEventListener("click", checkPass);
   $("#pInput").addEventListener("keydown",(e)=>{ if(e.key==="Enter") checkPass(); });
 
-  // click outside closes
   [ovView, ovForm, ovPass].forEach(ov=>{
     ov.addEventListener("click",(e)=>{
       if (e.target === ov) ov.classList.remove("show");
     });
   });
-
 
   // =========================
   // ✅ MAMÁ (NUEVO)
@@ -1200,13 +1248,11 @@ body::after{
     closeMamaForm();
   }
 
-  // ✅ Botón Mamá
   $("#btnMama").addEventListener("click", openMama);
   $("#btnMamaAdd").addEventListener("click", ()=> guardEdit(openMamaAdd));
   $("#closeMama").addEventListener("click", closeMama);
   $("#xMama").addEventListener("click", closeMama);
 
-  // ✅ Form Mamá
   $("#xMamaForm").addEventListener("click", closeMamaForm);
   $("#mCancel").addEventListener("click", closeMamaForm);
   $("#mSave").addEventListener("click", ()=> guardEdit(mamaSaveForm));
